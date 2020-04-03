@@ -6,7 +6,7 @@ The open-source markup-language of spider-framework.[Learn more about the salyut
 
 ![GitHub license](https://img.shields.io/badge/license-Apache%202.0-blue) ![MVN version](https://img.shields.io/badge/mvn-v0.0.8-blue)
 
-**Salyut** is a parser and execute engine of *trico script*. You can run and get result from *trico script* by **Salyut**. Due to **Salyut** is an open-source project，you can custom your own expression under [expr]() or custom your own token under [token]().
+**Salyut** is a parser and execute engine of *trico script*. You can run and get result from *trico script* by **Salyut**. Due to **Salyut** is an open-source project,you can custom your own expression under [expr]() or custom your own token under [token]().
 
 **Salyut** based on
 
@@ -30,7 +30,7 @@ The open-source markup-language of spider-framework.[Learn more about the salyut
 	* **segment.path** - The directory of preload .tr file.
 	* **headless** - Use headless browser or not.
 	* **browser.count** - The max count of the browsers.
-	* **newTab.path** - The file which salyut used to create new tab. Find it in [env](/env).
+	* **newTab.path** - The file which salyut used to create new tab. Find it in [env](/env) folder.
 
 * Write Code to invoke.
 

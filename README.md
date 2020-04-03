@@ -24,12 +24,12 @@
 	3.`java  -Dscript.path=../sample/webCalc.seg -Ddriver.path=../env/geckodriver-macOS  -classpath salyut-jar-with-dependencies.jar com.trico.salyut.Salyut`
 
 	4.参数说明
-	* **script.path** - 要执行脚本的路径 样例在[sample]()中可以找到。
-	* **driver.path** - driver路径 在[env]()中可以找到。
+	* **script.path** - 要执行脚本的路径 样例在[sample](/sample)中可以找到。
+	* **driver.path** - driver路径 在[env](/env)中可以找到。
 	* **segment.path** - 预加载segment文件的路径。
 	* **headless** - 是否无框启动浏览器。
 	* **browser.count** - 可启动的浏览个数。
-	* **newTab.path** - Salyut引擎创建新tab所需 在[env]()中可以找到，需要全路径。
+	* **newTab.path** - Salyut引擎创建新tab所需 在[env](/env)中可以找到，需要全路径。
 
 * 代码调用
 
