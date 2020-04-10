@@ -21,7 +21,7 @@
 
 	2.`cd target`
 
-	3.`java  -Dscript.path=../sample/webCalc.seg -Ddriver.path=../env/geckodriver-macOS  -classpath salyut-jar-with-dependencies.jar com.trico.salyut.Salyut`
+	3.`java  -Dscript.path=../sample/webCalc.tr -Ddriver.path=../env/geckodriver-macOS  -classpath salyut-jar-with-dependencies.jar com.trico.salyut.Salyut`
 
 	4.参数说明
 	* **script.path** - 要执行脚本的路径 样例在[sample](/sample)中可以找到。

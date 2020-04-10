@@ -22,7 +22,7 @@ The open-source markup-language of spider-framework.[Learn more about the salyut
 
 	2.`cd target`
 
-	3.`java  -Dscript.path=../sample/webCalc.seg -Ddriver.path=../env/geckodriver-macOS  -classpath salyut-jar-with-dependencies.jar com.trico.salyut.Salyut`
+	3.`java  -Dscript.path=../sample/webCalc.tr -Ddriver.path=../env/geckodriver-macOS  -classpath salyut-jar-with-dependencies.jar com.trico.salyut.Salyut`
 
 	4.Java opts parameters.
 	* **script.path** - The path of the script which you want to execute. Find the sample in [sample](/sample) folder.
