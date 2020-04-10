@@ -29,6 +29,7 @@ import com.trico.salyut.annotation.TokenMark;
 import com.trico.salyut.exception.SalyutException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
