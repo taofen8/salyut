@@ -74,7 +74,6 @@ public enum SalyutExceptionType {
 	Return(7,"[]"),
 
 	/**
-	 * @deprecated
 	 * selenium错误
 	 */
 	SeleniumError(8,"[selenium error]:"),

@@ -5,8 +5,9 @@ import com.trico.salyut.engine.ExecResult;
 import com.trico.salyut.engine.ExecUnit;
 import com.trico.salyut.exception.SalyutException;
 import com.trico.salyut.exception.SalyutExceptionType;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.remote.RemoteWebDriver;
+import com.trico.salyut.log.Log;
+import org.openqa.selenium.NoSuchSessionException;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import java.util.List;
 
@@ -24,6 +25,22 @@ public class SBrowserRunner<T extends ExecUnit> extends Thread {
         this.pendingJobListener = builder.pendingJobListener;
         this.driverStateListener = builder.driverStateListener;
         this.upperLimit = builder.upperLimit;
+    }
+
+    public boolean isDriverDownMessage(String message){
+        if (message.contains("Failed to decode response from marionette")
+        ||message.contains("Failed to interpret value as array")){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isDriverDownException(Exception e){
+        if (e instanceof NoSuchSessionException
+                || e instanceof UnreachableBrowserException){
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -51,8 +68,9 @@ public class SBrowserRunner<T extends ExecUnit> extends Thread {
             for(T execUnit:resources){
                 if (execUnit.isReady()){
                     try {
-                        execResultListener.setResult(execUnit.execute());
+                        execResultListener.setResult(execUnit.execute(),false);
                     }catch (Exception e){
+                        boolean driverDown = false;
                         if (e instanceof SalyutException){
                             if (((SalyutException) e).getType().equals(SalyutExceptionType.Stop)){
                                 //do nothing;
@@ -65,15 +83,31 @@ public class SBrowserRunner<T extends ExecUnit> extends Thread {
                                 ((STab) execUnit).offerMessage(e.getMessage());
                             }
                         }
-                        else if (e instanceof WebDriverException){
-                            driverStateListener.driverIsDown();
+                        else{
+                            ((STab) execUnit).offerMessage(SalyutExceptionType.SeleniumError.getExplain()+e.getMessage());
+                            driverDown = isDriverDownMessage(e.getMessage()) || isDriverDownException(e);
+                            if (driverDown){
+                                ((STab) execUnit).offerMessage(SalyutExceptionType.RuntimeError.getExplain()+
+                                        "driver is down, try to restart it... Please re-run the script. ");
+                            }
                         }
 
-                        execResultListener.setResult(new ExecResult.Builder()
-                                .type(ExecResult.InterruptType.FAILED)
-                                .jobId(execUnit.jobId())
-                                .build());
-                        execUnit.reset();
+                        try{
+                            execResultListener.setResult(new ExecResult.Builder()
+                                    .type(ExecResult.InterruptType.FAILED)
+                                    .jobId(execUnit.jobId())
+                                    .build(),driverDown);
+
+                        }catch (Exception e1){
+                            Log.logger.info("unhandled exception",e1);
+                        }
+                        finally {
+                            execUnit.reset();
+                        }
+
+                        if (driverDown){
+                            driverStateListener.driverIsDown();
+                        }
 
                     }
                     finally {

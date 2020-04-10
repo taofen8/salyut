@@ -39,5 +39,5 @@ public interface ExecResultListener {
 	 * @param result
 	 * 		{@link com.trico.salyut.STab} 执行结果
 	 */
-	void setResult(ExecResult result);
+	void setResult(ExecResult result, boolean needRecreateDriver);
 }

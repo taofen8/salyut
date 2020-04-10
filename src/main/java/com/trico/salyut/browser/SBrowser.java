@@ -23,22 +23,16 @@
  */
 package com.trico.salyut.browser;
 
-import com.alibaba.fastjson.JSONObject;
 import com.trico.salyut.engine.ExecResult;
 import com.trico.salyut.engine.ExecUnit;
-import com.trico.salyut.SPlugin;
 import com.trico.salyut.STab;
 import com.trico.salyut.Salyut;
 import com.trico.salyut.exception.Check;
 import com.trico.salyut.exception.SalyutException;
 import com.trico.salyut.exception.SalyutExceptionType;
 import com.trico.salyut.log.Log;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -46,6 +40,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.GeckoDriverService;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.service.DriverService;
 
 import java.util.*;
 
@@ -98,6 +93,8 @@ public class SBrowser {
     /** 目前只存储一个job */
     private STab.Job stash;
 
+    private DriverService driverService;
+
     // ------------------------------------------------------------------------
 
     public static SBrowser ofNonPlugin() throws SalyutException{
@@ -130,8 +127,8 @@ public class SBrowser {
                 //add some plugin
             }
             try {
-                GeckoDriverService geckoDriverService = GeckoDriverService.createDefaultService();
-                this.driver = new FirefoxDriver(geckoDriverService, firefoxOptions());
+                this.driverService = GeckoDriverService.createDefaultService();
+                this.driver = new FirefoxDriver(((GeckoDriverService) driverService), firefoxOptions());
             } catch (Exception e) {
                 Log.logger.error("new firefox driver created error:" + e);
             }
@@ -175,7 +172,7 @@ public class SBrowser {
                             }
                     )
                     .execResultListener(
-                            result -> {
+                            (result, needRecreateDriver) -> {
                                 boolean succeed = !ExecResult.InterruptType.FAILED.equals(result.intType);
                                 Salyut.Result ret = new Salyut.Result.Builder()
                                         .succeed(succeed)
@@ -185,8 +182,10 @@ public class SBrowser {
                                 if (null != Salyut.getResultListener()){
                                     Salyut.getResultListener().get(ret.get());
                                 }
-                                closeRedundantTabs();
-                                changeToPCMode();
+                                if (!needRecreateDriver){
+                                    closeRedundantTabs();
+                                    changeToPCMode();
+                                }
                             }
                     )
                     .driverStateListener(
@@ -212,13 +211,24 @@ public class SBrowser {
     }
 
     private void reset() {
+        mobileMode = false;
         try {
             if (null != driver){
+                driver.close();
                 driver.quit();
             }
         }catch (Exception e){
             e.printStackTrace();
         }
+
+        try {
+            if (null != driverService){
+                driverService.stop();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         tabList.clear();
 
         createDriver();
@@ -280,6 +290,8 @@ public class SBrowser {
             }
         }
     }
+
+
 
     @SuppressWarnings("unchecked")
     public void newTab(int num) {
