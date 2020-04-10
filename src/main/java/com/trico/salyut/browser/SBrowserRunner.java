@@ -5,8 +5,8 @@ import com.trico.salyut.engine.ExecResult;
 import com.trico.salyut.engine.ExecUnit;
 import com.trico.salyut.exception.SalyutException;
 import com.trico.salyut.exception.SalyutExceptionType;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.NoSuchSessionException;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import java.util.List;
 
@@ -24,6 +24,21 @@ public class SBrowserRunner<T extends ExecUnit> extends Thread {
         this.pendingJobListener = builder.pendingJobListener;
         this.driverStateListener = builder.driverStateListener;
         this.upperLimit = builder.upperLimit;
+    }
+
+    public boolean isDriverDownMessage(String message){
+        if (message.contains("Failed to decode response from marionette")){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isDriverDownException(Exception e){
+        if (e instanceof NoSuchSessionException
+                || e instanceof UnreachableBrowserException){
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -65,8 +80,14 @@ public class SBrowserRunner<T extends ExecUnit> extends Thread {
                                 ((STab) execUnit).offerMessage(e.getMessage());
                             }
                         }
-                        else if (e instanceof WebDriverException){
-                            driverStateListener.driverIsDown();
+                        else{
+
+                            ((STab) execUnit).offerMessage(SalyutExceptionType.SeleniumError.getExplain()+e.getMessage());
+                            if (isDriverDownMessage(e.getMessage()) || isDriverDownException(e)){
+                                ((STab) execUnit).offerMessage(SalyutExceptionType.RuntimeError.getExplain()+
+                                        "driver is down, try to restart it... Please re-run the script. ");
+                                driverStateListener.driverIsDown();
+                            }
                         }
 
                         execResultListener.setResult(new ExecResult.Builder()
