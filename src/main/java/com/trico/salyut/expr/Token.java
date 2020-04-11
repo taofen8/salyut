@@ -23,6 +23,9 @@
  */
 
 package com.trico.salyut.expr;
+
+import java.util.stream.Stream;
+
 public  class Token{
 
     public enum Type{
@@ -48,7 +51,6 @@ public  class Token{
             return code == other.code;
         }
     }
-
 
     public Type type;
     public String str;

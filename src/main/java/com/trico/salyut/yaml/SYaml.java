@@ -57,7 +57,7 @@ public class SYaml {
 
     private static final String EXPR_FORMAT = "'%s'";
 
-    private static final String STANDARD_IDENT = "   ";
+    private static final String STANDARD_IDENT = "    ";
 
     private SYaml() {
         throw new AssertionError();
@@ -94,7 +94,7 @@ public class SYaml {
         builder.append(lines[0]);
         builder.append("\n");
         for(int i = 1; i < lines.length; i++){
-            builder.append("    ");
+            builder.append(STANDARD_IDENT);
             builder.append(lines[i]);
             builder.append("\n");
         }
@@ -119,6 +119,10 @@ public class SYaml {
                 return builder.toString();
             }
             else if (tuple2.f1 instanceof LinkedHashMap){
+                if ( 0 == ((LinkedHashMap) tuple2.f1).size()){
+                    builder.append("{}");
+                    return builder.toString();
+                }
                 Iterator it = ((LinkedHashMap) tuple2.f1).keySet().iterator();
                 if (SToken.isComplexToken((String)tuple2.f0)){
                     builder.append("\n");
