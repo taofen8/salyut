@@ -206,6 +206,9 @@ public abstract class SToken implements ExprASTContext, LambdaExprASTContext {
      * </p>
      */
 	public static List<SToken> getList(List<Map<String,Object>> list,STab tab, Long level, SToken blockTok) throws SalyutException{
+	    if (null == list){
+	        throw new SalyutException(SalyutExceptionType.ParseError, blockTok, "can not find sub tokens");
+        }
         List<SToken> tokens = new ArrayList<>();
         String scriptWithToken;
         for (Map<String,Object> tokenMap : list){
