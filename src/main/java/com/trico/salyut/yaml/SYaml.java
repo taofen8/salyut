@@ -119,6 +119,10 @@ public class SYaml {
                 return builder.toString();
             }
             else if (tuple2.f1 instanceof LinkedHashMap){
+                if ( 0 == ((LinkedHashMap) tuple2.f1).size()){
+                    builder.append("{}");
+                    return builder.toString();
+                }
                 Iterator it = ((LinkedHashMap) tuple2.f1).keySet().iterator();
                 if (SToken.isComplexToken((String)tuple2.f0)){
                     builder.append("\n");

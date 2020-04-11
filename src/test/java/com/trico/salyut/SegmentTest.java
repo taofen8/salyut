@@ -16,7 +16,7 @@ public class SegmentTest extends TestCase  {
     }
 
     public static void testSegment() throws SalyutException {
-        String seg = "#>========================================\n" +
+        String seg1 = "#>========================================\n" +
                 "#> ps4game\n" +
                 "#> main seg: ps4game\n" +
                 "#> test seg: __test__ps4game\n" +
@@ -59,7 +59,15 @@ public class SegmentTest extends TestCase  {
                 "# - callin: { seg: '\"ps4game\"', 0: '\"https://ku.gamersky.com/release/ps4_201912/\"'}\n" +
                 "# - echo: '$1'";
 
-        List<Segment> segmentList = SToken.getSegmentList(seg);
+        String seg2 = "- segment: \n" +
+                "      name: '\"__test__baidunews\"'\n" +
+                "      args:  {}\n" +
+                "      package: '\"tom\"'\n" +
+                "      body: \n" +
+                "         - load: '\"http://news.baidu.com/\"'";
+
+
+        List<Segment> segmentList = SToken.getSegmentList(seg2);
         for (Segment segment:segmentList){
             System.out.println(segment.getPureCode());
         }
