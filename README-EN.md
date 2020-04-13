@@ -2,9 +2,11 @@
 
 # Salyut
 
-The open-source markup-language of spider-framework.[Learn more about the salyut grammar.](https://www.trico.cloud/tricoDoc/overview/index.html)
+The open-source markup-language of spider-framework. [Learn more about the salyut grammar.](https://www.trico.cloud/tricoDoc/overview/index.html)
 
-![GitHub license](https://img.shields.io/badge/license-Apache%202.0-blue) ![MVN version](https://img.shields.io/badge/mvn-v0.0.8-blue)
+[![GitHub license](https://img.shields.io/badge/license-Apache%202.0-blue)]() 
+[![MVN version](https://img.shields.io/badge/mvn-v0.0.8-blue)]()
+[![Build Status](https://travis-ci.org/shenruisi/salyut.svg?branch=master)](https://travis-ci.org/shenruisi/salyut)
 
 **Salyut** is a parser and execute engine of *trico script*. You can run and get result from *trico script* by **Salyut**. Due to **Salyut** is an open-source project,you can custom your own expression under [expr]() or custom your own token under [token]().
 
@@ -24,7 +26,7 @@ The open-source markup-language of spider-framework.[Learn more about the salyut
 
 	3.`java  -Dscript.path=../sample/webCalc.tr -Ddriver.path=../env/geckodriver-macOS  -classpath salyut-jar-with-dependencies.jar com.trico.salyut.Salyut`
 
-	4.Java opts parameters.
+	4.java opts parameters.
 	* **script.path** - The path of the script which you want to execute. Find the sample in [sample](/sample) folder.
 	* **driver.path** - The path of the driver binary. Find it in [env](/env) folder.
 	* **segment.path** - The directory of preload .tr file.
@@ -32,7 +34,7 @@ The open-source markup-language of spider-framework.[Learn more about the salyut
 	* **browser.count** - The max count of the browsers.
 	* **newTab.path** - The file which salyut used to create new tab. Find it in [env](/env) folder.
 
-* Write Code to invoke.
+* Write code to invoke.
 
 ```java
 Salyut.setEnv(EnvKey.DRIVER_PATH,{your driver path});
@@ -63,6 +65,9 @@ Salyut.execScript(script.getContent(),"","");
 </dependency>
 ```
 
+## Architecture ##
+
+![](docs/architecture-en.png)
 
 
 ## Licensing ###

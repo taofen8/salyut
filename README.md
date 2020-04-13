@@ -4,7 +4,9 @@
 
 基于标记语言的开源爬虫框架。[查看Salyut语法。](https://www.trico.cloud/tricoDoc/overview/index.html)
 
-![GitHub license](https://img.shields.io/badge/license-Apache%202.0-blue) ![MVN version](https://img.shields.io/badge/mvn-v0.0.8-blue)
+[![GitHub license](https://img.shields.io/badge/license-Apache%202.0-blue)]()
+[![MVN version](https://img.shields.io/badge/mvn-v0.0.8-blue)]()
+[![Build Status](https://travis-ci.org/shenruisi/salyut.svg?branch=master)](https://travis-ci.org/shenruisi/salyut)
 
 **Salyut** 是*trico script*的的解析执行引擎，通过简单的调用Salyut中方法，即可以运行*trico script*并得到相应的结果。**Salyut**是一个开源项目，您可以自行修改[expr]()目录下的类定制自己语法表达式，也可以通过修改或增加[token]()目录下的类来扩充**Salyut**的能力。
 
@@ -62,6 +64,9 @@ Salyut.execScript(script.getContent(),"","");
 </dependency>
 ```
 
+## 架构 ##
+
+![](docs/architecture-cn.png)
 
 
 ## 许可证 ###
