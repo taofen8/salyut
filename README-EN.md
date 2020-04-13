@@ -4,7 +4,9 @@
 
 The open-source markup-language of spider-framework. [Learn more about the salyut grammar.](https://www.trico.cloud/tricoDoc/overview/index.html)
 
-![GitHub license](https://img.shields.io/badge/license-Apache%202.0-blue) ![MVN version](https://img.shields.io/badge/mvn-v0.0.8-blue)
+[![GitHub license](https://img.shields.io/badge/license-Apache%202.0-blue)]() 
+[![MVN version](https://img.shields.io/badge/mvn-v0.0.8-blue)]()
+[![Build Status](https://travis-ci.org/shenruisi/salyut.svg?branch=master)](https://travis-ci.org/shenruisi/salyut)
 
 **Salyut** is a parser and execute engine of *trico script*. You can run and get result from *trico script* by **Salyut**. Due to **Salyut** is an open-source project,you can custom your own expression under [expr]() or custom your own token under [token]().
 
