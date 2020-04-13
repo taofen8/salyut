@@ -63,6 +63,9 @@ Salyut.execScript(script.getContent(),"","");
 </dependency>
 ```
 
+## Architecture ##
+
+![](docs/architecture-en.png)
 
 
 ## Licensing ###

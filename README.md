@@ -62,6 +62,9 @@ Salyut.execScript(script.getContent(),"","");
 </dependency>
 ```
 
+## 架构 ##
+
+![](docs/architecture-cn.png)
 
 
 ## 许可证 ###
