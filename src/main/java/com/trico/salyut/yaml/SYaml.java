@@ -102,8 +102,9 @@ public class SYaml {
     }
 
     public static String parser(Tuple2<Object,Object> tuple2, String indent, KeyType keyType) throws SalyutException{
+        StringBuilder builder = new StringBuilder(indent);
         try{
-            StringBuilder builder = new StringBuilder(indent);
+
             if (KeyType.TOKEN.equals(keyType)){
                 builder.append(String.format(TOKEN_FORMAT, tuple2.f0));
             }
@@ -166,10 +167,13 @@ public class SYaml {
                 return builder.toString();
             }
         }catch (Exception e){
-            e.printStackTrace();
             throw new SalyutException(SalyutExceptionType.ParseError,"yaml object to script error");
         }
 
+
+        if (null == tuple2.f1){
+            return builder.toString();
+        }
 
         throw new SalyutException(SalyutExceptionType.UnhandledError,"script format is incorrect");
     }

@@ -212,6 +212,9 @@ public abstract class SToken implements ExprASTContext, LambdaExprASTContext {
         List<SToken> tokens = new ArrayList<>();
         String scriptWithToken;
         for (Map<String,Object> tokenMap : list){
+            if (null == tokenMap){
+                throw new SalyutException(SalyutExceptionType.ParseError, blockTok, "can not parse \"-\" symbol. Did you forget writing token name?");
+            }
             scriptWithToken = SYaml.toScript((LinkedHashMap<String, Object>) tokenMap);
             String key = tokenMap.keySet().iterator().next();
             String tokenName = key;
