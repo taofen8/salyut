@@ -67,7 +67,38 @@ public class SegmentTest extends TestCase  {
                 "         - load: '\"http://news.baidu.com/\"'";
 
 
-        List<Segment> segmentList = SToken.getSegmentList(seg2);
+        String seg3 = "- segment:\n" +
+                "    name: '\"batchSpiderBloomingdales\"'\n" +
+                "    args: {0: '/url', 1: '/operatorId'}\n" +
+                "    body:\n" +
+                "      - copy: {path: '/R/operId',value: '$/operatorId'}\n" +
+                "      - load: '$/url'\n" +
+                "      - js: '\"window.scrollTo(0,500)\"'\n" +
+                "      - find: {ele: '#CCPA_banner button.close-small'}\n" +
+                "      - if: '$1'\n" +
+                "      - then:\n" +
+                "        - click: {ele: '#CCPA_banner button.close-small',js: '$true'}\n" +
+                "        - wait: {type: '\"time\"',millis: '2000'}\n" +
+                "      - select: {eles: 'ul.items>li>div>a',path: '/R/producturls',attr: '\"href\"'}\n" +
+                "      - loop:\n" +
+                "          in: {start: '1',end: '10',step: '1'}\n" +
+                "          each:\n" +
+                "            - find: {ele: '#filterResultsTop li.nextArrow>a.action-btn'}\n" +
+                "            - if: '$1'\n" +
+                "            - then:\n" +
+                "              - click: {ele: '#filterResultsTop li.nextArrow>a.action-btn'}\n" +
+                "              - wait: {type: '\"time\"',millis: '3000'}\n" +
+                "              - loop:\n" +
+                "                  in: {eles: 'ul.items>li>div>a'}\n" +
+                "                  each:\n" +
+                "                    - select: {ele: '$e',attr: '\"href\"',path: '/tmpurl'}\n" +
+                "                    - put: {path: '/R/producturls[-1]',value: '$/tmpurl'}\n" +
+                "            - else:\n" +
+                "              - break:\n" +
+                "      - return: '$/R'";
+
+
+        List<Segment> segmentList = SToken.getSegmentList(seg3);
         for (Segment segment:segmentList){
             System.out.println(segment.getPureCode());
         }

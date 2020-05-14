@@ -44,6 +44,6 @@ public class Js extends SToken{
 	@Override
 	public void action() throws SalyutException{
 		super.action();
-		((JavascriptExecutor) atTab.driver).executeScript(exp);
+		setResult(((JavascriptExecutor) atTab.driver).executeScript(exp));
 	}
 }

@@ -45,33 +45,68 @@ public class Find extends SToken{
 	@Attribute(name = "path")
 	private String path = null;
 
+	@Attribute(name = "target", isSel = true)
+	private String target = null;
+
+	@Attribute(name = "parent", isSel = true)
+	private String parent = null;
 	
 	@Override
 	public void action() throws SalyutException{
 		super.action();
 
-		WebElement target = null;
+		if (target != null){
+			WebElement found = null;
 
-		try{
-			if (under != null){
-				setSubFinder(((WebElement) getExprValue(under)));
+			try{
+				if (parent != null){
+					setSubFinder(getWebElementByExpr(parent));
+				}
+
+				found = getWebElementByExpr(target);
 			}
-
-			target = (WebElement) getExprValue(ele);
-		}catch (Exception e){
-			if (e instanceof SalyutException){
-				/** 需要添加该catch 需要当 setSubFinder(((WebElement) getExprValue(under))) 或 (WebElement) getExprValue(ele)
-				 * 出错时不要直接退出，而是通过setResult来设置result为false*/
-				if (!e.getMessage().contains("Unable to locate element")){
-					throw e;
+			catch (Exception e){
+				if (e instanceof SalyutException){
+					if (!e.getMessage().contains("Unable to locate element")){
+						throw e;
+					}
 				}
 			}
+
+
+			if (path != null){
+				setExprValue(path,found);
+			}
+			setResult(found == null ? 0:1);
+
+
+		}
+		else{
+			WebElement found = null;
+
+			try{
+				if (under != null){
+					setSubFinder(((WebElement) getExprValue(under)));
+				}
+
+				found = (WebElement) getExprValue(ele);
+			}catch (Exception e){
+				if (e instanceof SalyutException){
+					/** 需要添加该catch 需要当 setSubFinder(((WebElement) getExprValue(under))) 或 (WebElement) getExprValue(ele)
+					 * 出错时不要直接退出，而是通过setResult来设置result为false*/
+					if (!e.getMessage().contains("Unable to locate element")){
+						throw e;
+					}
+				}
+			}
+
+			if (path != null){
+				setExprValue(path,found);
+			}
+			setResult(found == null ? 0:1);
 		}
 
-		if (path != null){
-			setExprValue(path,target);
-		}
-		setResult(target == null ? 0:1);
+
 	}
 
 }

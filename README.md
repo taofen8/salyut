@@ -16,6 +16,24 @@
 
 * 主要通过[Selenium]()来获取浏览器的操控和解析能力，如果您对*Selenium*有一定的了解可以更好的帮助您提升*trico script*的一些能力。
 
+## 脚本示例 ##
+```yaml
+- segment: #This is a trico script sample. A web calculator.
+    name: 'calc'
+    args: {0: '/input'}
+    body:
+    - load: '"http://www.baidu.com"' #load page of Baidu
+    - wait: {ele: '#su', type: 'presence'} #wait element appear
+    - fill: {ele: '#kw', value: '$/input'}
+    - click: {ele: '#su'} #click search button
+    - wait: {ele: '.op_new_val_screen_result', type: 'presence'} #fetch the result
+    - select: {ele: '.op_new_val_screen_result', path: '/result'}
+    - put: { path: '/resultInt', value: '$/result', lambda: 'x -> return parseInt(x)'}
+    - return: '$/resultInt'
+- callin: {seg: '"calc"', 0: '"1+1"'} #call the segment named 'calc' and pass the argument '1+1'
+- return: '$1'
+```
+
 ## 如何使用 ###
 * jar包调用
 

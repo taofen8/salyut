@@ -16,6 +16,23 @@ The open-source markup-language of spider-framework. [Learn more about the salyu
 
 * Control the browser by [Selenium](https://www.selenium.dev/). If you have experience with *Selenium*,it should be easy to extend the funnction of trico script.
 
+## Sample Script ##
+```yaml
+- segment: #This is a trico script sample. A web calculator.
+    name: 'calc'
+    args: {0: '/input'}
+    body:
+    - load: '"http://www.baidu.com"' #load page of Baidu
+    - wait: {ele: '#su', type: 'presence'} #wait element appear
+    - fill: {ele: '#kw', value: '$/input'}
+    - click: {ele: '#su'} #click search button
+    - wait: {ele: '.op_new_val_screen_result', type: 'presence'} #fetch the result
+    - select: {ele: '.op_new_val_screen_result', path: '/result'}
+    - put: { path: '/resultInt', value: '$/result', lambda: 'x -> return parseInt(x)'}
+    - return: '$/resultInt'
+- callin: {seg: '"calc"', 0: '"1+1"'} #call the segment named 'calc' and pass the argument '1+1'
+- return: '$1'
+```
 
 ## Usage ###
 * Invoke with jar.
