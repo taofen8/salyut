@@ -38,4 +38,5 @@ public @interface Attribute {
     String underKey() default "";
     boolean unique() default false;
     boolean rebuildEle() default false; // ele:'div' -> ele:'@div'
+    boolean isSel() default false; //the action as the same as rebuildEle, but will expr scan first.
 }

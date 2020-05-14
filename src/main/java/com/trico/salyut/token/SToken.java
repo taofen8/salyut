@@ -50,10 +50,13 @@ import com.trico.salyut.yaml.SYaml;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
 
 import com.trico.salyut.STab;
 import com.trico.salyut.path.Path;
+import org.openqa.selenium.WebElement;
+
+import javax.annotation.Nullable;
+
 /**
  * 所有Token的基类
  * @author shenyin
@@ -598,6 +601,9 @@ public abstract class SToken implements ExprASTContext, LambdaExprASTContext {
                                     if (annotation.exprScan()){
                                         field.set(this,getExprValue(value));
                                     }
+                                    else if (annotation.isSel()){
+                                        field.set(this,value);
+                                    }
                                     else{
                                         field.set(this,value);
                                     }
@@ -638,7 +644,11 @@ public abstract class SToken implements ExprASTContext, LambdaExprASTContext {
                             if (annotation.exprScan()) {
                                 field.set(this, getExprValue(value));
 
-                            }else {
+                            }
+                            else if (annotation.isSel()){
+                                field.set(this, value);
+                            }
+                            else {
                                 field.set(this, value);
                             }
                         }catch (Exception e){
@@ -661,6 +671,66 @@ public abstract class SToken implements ExprASTContext, LambdaExprASTContext {
                 }
             }
         }
+    }
+
+    public WebElement getWebElementByExpr(String expr) throws SalyutException{
+        Object value = getExprValue(expr);
+
+        if (value instanceof WebElement){
+            return ((WebElement) value);
+        }
+        else if (value instanceof String){
+            value  =  getExprValue("@"+value);
+
+            if (value instanceof WebElement){
+                return ((WebElement) value);
+            }
+
+        }
+
+        throw new SalyutException(SalyutExceptionType.RuntimeError,this,"can not get web element from expr `"+expr+"`");
+    }
+
+
+    public List<WebElement> getWebElementsByExpr(String expr) throws SalyutException{
+        Object value = getExprValue(expr);
+        if (value instanceof List){
+            List list = ((List) value);
+            boolean pass = true;
+            for (Object o:list){
+                if (!(o instanceof WebElement)){
+                    pass = false;
+                    break;
+                }
+            }
+
+            if (pass){
+                return ((List) value);
+            }
+
+        }
+        else if (value instanceof String){
+            findMultiElesOn();
+            value  =  getExprValue("@"+value);
+            findMultiElesOff();
+
+            if (value instanceof List){
+                List list = ((List) value);
+                boolean pass = true;
+                for (Object o:list){
+                    if (!(o instanceof WebElement)){
+                        pass = false;
+                        break;
+                    }
+                }
+
+                if (pass){
+                    return ((List) value);
+                }
+            }
+        }
+
+        throw new SalyutException(SalyutExceptionType.RuntimeError,this,"can not get web elements from expr `"+expr+"`");
     }
 
 	public void action() throws SalyutException {

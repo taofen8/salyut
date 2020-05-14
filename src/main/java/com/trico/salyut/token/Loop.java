@@ -45,10 +45,15 @@ import org.openqa.selenium.WebElement;
  */
 @TokenMark(name = "loop")
 public class Loop extends SToken implements Block{
+	@Deprecated
 	@Attribute(name = "eles",underKey = "in", rebuildEle = true)
-	private String eles;
+	private String eles = null;
+	@Attribute(name = "targets",underKey = "in", isSel = true)
+	private String targets = null;
+	@Attribute(name = "parent", underKey = "in", isSel = true)
+	private String parent = null;
 	@Attribute(name = "values",underKey = "in",exprScan = true)
-	private Object values;
+	private Object values = null;
 	private List<SToken> tokenList;
 	private int eleIndex = 0;
 	@Attribute(name = "start",underKey = "in",exprScan = true)
@@ -65,7 +70,10 @@ public class Loop extends SToken implements Block{
 	@Override
 	public void action() throws SalyutException {
 		super.action();
-		if (eles != null){
+		if (targets != null){
+			setExecResult(targetsLoop());
+		}
+		else if (eles != null){
 			setExecResult(elesLoop());
 		}
 		else if (values != null){
@@ -79,7 +87,53 @@ public class Loop extends SToken implements Block{
 		}
 	}
 
+	private ExecResult targetsLoop() throws SalyutException{
+		if (parent != null){
+			setSubFinder(getWebElementByExpr(parent));
+		}
+
+		List<WebElement> webElements = getWebElementsByExpr(targets);
+		int lastElementsCount = webElements.size();
+		setExprValue(Path.Reversed.COUNT, lastElementsCount);
+		for (int i = 0; i < webElements.size(); i++) {
+			WebElement webElement = webElements.get(i);
+			setExprValue(Path.Reversed.E, webElement);
+			setExprValue(Path.Reversed.I, i);
+			ExecResult result;
+			try{
+				result = atTab.executor.execute(statements);
+			}
+			catch (SalyutException e){
+				throw new SalyutException(SalyutExceptionType.RuntimeError,e.getToken(),e.getAddonMessage()+ " at loop times "+i);
+			}
+
+			if (result.intType.equals(ExecResult.InterruptType.BREAK)){
+				return ExecResult.getThrough();
+			}
+			else if (result.intType.equals(ExecResult.InterruptType.RETURN)){
+				return result;
+			}
+
+			if (mutable) {
+				findMultiElesOn();
+				webElements = getWebElementsByExpr(targets);
+				findMultiElesOff();
+				if (webElements.size() < lastElementsCount) { //如果指令会删除节点，则把当前节点的指令全部执行完毕，并将eleIndex归零
+					i--;
+				}
+			}
+
+		}
+
+		return ExecResult.getThrough();
+	}
+
+	@Deprecated
 	private ExecResult elesLoop() throws SalyutException{
+		if (parent != null){
+			setSubFinder(getWebElementByExpr(parent));
+		}
+
 		findMultiElesOn();
 		List<WebElement> webElements = (List<WebElement>) getExprValue(eles);
 		findMultiElesOff();
