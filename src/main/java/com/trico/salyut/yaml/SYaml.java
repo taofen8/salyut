@@ -69,8 +69,13 @@ public class SYaml {
 
 
     @SuppressWarnings("unchecked")
-    public static <T> T toObj(String script){
-        return YAML_ENGINE.load(script);
+    public static <T> T toObj(String script) throws SalyutException{
+        try {
+            return YAML_ENGINE.load(script);
+        }catch (Exception e){
+            throw new SalyutException(SalyutExceptionType.ParseError,"yaml load error");
+        }
+
     }
 
     public static String toPureCode(LinkedHashMap<String,Object> map) throws SalyutException{
@@ -129,7 +134,7 @@ public class SYaml {
                     builder.append("\n");
                     while (it.hasNext()){
                         Object key = it.next();
-                        String subTokenStr = parser(Tuple2.of(key,((LinkedHashMap) tuple2.f1).get(key)),indent+STANDARD_IDENT+STANDARD_IDENT,KeyType.SUB_TOKEN);
+                        String subTokenStr = parser(Tuple2.of(key,((LinkedHashMap) tuple2.f1).get(key)),indent+STANDARD_IDENT,KeyType.SUB_TOKEN);
                         builder.append(subTokenStr);
                         if (!subTokenStr.endsWith("\n")){
                             builder.append("\n");

@@ -36,13 +36,10 @@ public class Executor<T extends SToken> {
 
             result = tok.getExecResult();
             if (result.intType.equals(ExecResult.InterruptType.BREAK)
-            || result.intType.equals(ExecResult.InterruptType.RETURN) ){
+            || result.intType.equals(ExecResult.InterruptType.RETURN)
+            ||result.intType.equals(ExecResult.InterruptType.CONTINUE)){
                 statements.rollback();
                 return result;
-            }
-            else if (result.intType.equals(ExecResult.InterruptType.CONTINUE)){
-                statements.rollback();
-                continue;
             }
             statements.getNextTok();
         }

@@ -87,7 +87,7 @@ public class SBrowser {
     public OutputRunner getOutput(){ return  output; }
 
     /** 是否为手机浏览器模式 */
-    private boolean mobileMode;
+    private boolean mobileMode = false;
     public boolean isMobileMode(){ return mobileMode; }
 
     /** 目前只存储一个job */
@@ -211,7 +211,6 @@ public class SBrowser {
     }
 
     private void reset() {
-        mobileMode = false;
         try {
             if (null != driver){
                 driver.close();
