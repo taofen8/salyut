@@ -318,7 +318,7 @@ public abstract class SToken implements ExprASTContext, LambdaExprASTContext {
 
     @Override
     public boolean isGlobalVar(String path) {
-        return Path.isGlobalVar(path);
+        return Path.isGlobalVar("/"+path);
     }
 
     @SuppressWarnings("unchecked")

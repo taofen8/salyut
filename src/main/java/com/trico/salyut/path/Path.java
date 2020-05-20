@@ -30,7 +30,7 @@ import java.util.Map;
 public class Path {
 	private  Map<String,Object> _PATH_VAR_MAP = new HashMap<String,Object>();
 	public final static String INNER_VAR_PREFIX = "__";
-	private final static String GLOBAL_PREFIX = "_G";
+	private final static String GLOBAL_PREFIX = "/_G";
 
 	public enum Reversed{
 		/** $0 返回{@link com.trico.salyut.token.SToken} 名 */

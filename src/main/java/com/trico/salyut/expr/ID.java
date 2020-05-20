@@ -330,7 +330,7 @@ public class ID {
                 return new ID(longVal > (Long)other.val());
             }
             else if (other.type.equals(Type.Double)){
-                return new ID(doubleVal > (Double)other.val());
+                return new ID(longVal > (Double)other.val());
             }
         }
         else if (type.equals(Type.Double)){
@@ -351,7 +351,7 @@ public class ID {
                 return new ID(longVal < (Long)other.val());
             }
             else if (other.type.equals(Type.Double)){
-                return new ID(doubleVal < (Double)other.val());
+                return new ID(longVal < (Double)other.val());
             }
         }
         else if (type.equals(Type.Double)){
