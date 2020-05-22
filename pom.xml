@@ -4,7 +4,7 @@
 
     <groupId>com.trico.salyut</groupId>
     <artifactId>salyut</artifactId>
-    <version>0.0.8rc1-SNAPSHOT</version>
+    <version>0.0.8.RC1</version>
     <packaging>jar</packaging>
 
     <name>salyut</name>
