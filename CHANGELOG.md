@@ -5,7 +5,7 @@ This is the first public version of salyut.
 
 ### Features
 
-- Add new attributes `targets`,`target` to token (- select:,- loop:, - find:).
+- Add new attributes `targets`,`target` to token (**- select:**,**- loop:**, **- find:**).
 - Add new token **- mobile:** to support run firefox as mobile mode. 
 - Deprecated token **- switchtmptab:**,**- closetmptab:**.
 
