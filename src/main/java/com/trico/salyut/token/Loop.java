@@ -59,7 +59,7 @@ public class Loop extends SToken implements Block{
 	@Attribute(name = "start",underKey = "in",exprScan = true)
 	private Long start = 0L;
 	@Attribute(name = "end",underKey = "in",exprScan = true)
-	private Long end = 0L;
+	private Long end = -1L;
 	@Attribute(name = "step",underKey = "in",exprScan = true)
 	private Long step = 1L;
 	@Attribute(name = "mutable",underKey = "in", exprScan = true)
@@ -95,7 +95,8 @@ public class Loop extends SToken implements Block{
 		List<WebElement> webElements = getWebElementsByExpr(targets);
 		int lastElementsCount = webElements.size();
 		setExprValue(Path.Reversed.COUNT, lastElementsCount);
-		for (int i = 0; i < webElements.size(); i++) {
+
+		for (int i = (int)(long)start; i < webElements.size() && (-1L == end || i < end); i+=step) {
 			WebElement webElement = webElements.get(i);
 			setExprValue(Path.Reversed.E, webElement);
 			setExprValue(Path.Reversed.I, i);
@@ -139,7 +140,7 @@ public class Loop extends SToken implements Block{
 		findMultiElesOff();
 		int lastElementsCount = webElements.size();
 		setExprValue(Path.Reversed.COUNT, lastElementsCount);
-		for (int i = 0; i < webElements.size(); i++) {
+		for (int i = (int)(long)start; i < webElements.size() && (-1L == end || i < end); i+=step) {
 			WebElement webElement = webElements.get(i);
 			setExprValue(Path.Reversed.E, webElement);
 			setExprValue(Path.Reversed.I, i);
@@ -177,7 +178,7 @@ public class Loop extends SToken implements Block{
 		if (values != null) {
 			Check.requireListType(values,this);
 			setExprValue(Path.Reversed.COUNT, ((List) values).size());
-			for (int i = 0; i < ((List) values).size(); i++) {
+			for (int i = (int)(long)start; i < ((List) values).size() && (-1L == end || i < end); i+=step) {
 				setExprValue(Path.Reversed.V, ((List) values).get(i));
 				setExprValue(Path.Reversed.I, i);
 				ExecResult result;
