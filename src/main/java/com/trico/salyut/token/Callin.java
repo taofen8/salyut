@@ -49,17 +49,24 @@ public class Callin extends SToken {
 	private String seg;
 	@Attribute(name = "package", exprScan = true)
 	private String packageName = "default";
-	@Attribute(name = "args", exprScan = true)
-	private List<Object> args;
+	@Attribute(name = "args")
+	private String args;
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void action() throws SalyutException {
 		super.action();
 
-		if (null == args){
+		List<Object> argList;
+		Object argsObj = null;
+
+		if (args != null){
+			argsObj = getExprValue(args);
+		}
+
+		if (null == argsObj){
 			Map<String, Object> map = (Map<String, Object>) getParam();
-			this.args = new ArrayList<>();
+			argList = new ArrayList<>();
 			Integer argIndex = 0;
 			while (argIndex < 50) {
 				String argPath = null;
@@ -68,10 +75,20 @@ public class Callin extends SToken {
 						break;
 					}
 				}
-				args.add(getExprValue(argPath));
+				argList.add(getExprValue(argPath));
 				argIndex++;
 			}
 		}
+		else{
+			if (argsObj instanceof List){
+				argList = ((List) argsObj);
+			}
+			else{
+				throw new SalyutException(SalyutExceptionType.RuntimeError,this, "args must be `array` type");
+			}
+		}
+
+
 
 		if (seg != null) {
 			String segmentYaml = Salyut.segmentMap.get(segMapKey());
@@ -86,9 +103,9 @@ public class Callin extends SToken {
 			 */
 			setExprValue(segment.getSegmentPath(), new HashMap<>(),true);
 
-			for (int i = 0; i < args.size() && i < segment.getArgs().size(); i++) {
+			for (int i = 0; i < argList.size() && i < segment.getArgs().size(); i++) {
 				String path = segment.getArgs().get(i);
-				setExprValue(path,args.get(i),true);
+				setExprValue(path,argList.get(i),true);
 			}
 
 			ExecResult result = segment.invoke();

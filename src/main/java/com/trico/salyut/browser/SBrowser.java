@@ -344,7 +344,11 @@ public class SBrowser {
         return sortSet.toArray(new String[sortSet.size()]);
     }
 
-    /** 切换到制定tab */
+    /**
+     * 切换到制定tab
+     * @param index 切换目标tab下标
+     * @throws SalyutException
+     */
     public void switchTab(long index) throws SalyutException{
         try {
             Thread.sleep(1000);
@@ -380,7 +384,10 @@ public class SBrowser {
         reset();
     }
 
-    /** 保存job */
+    /**
+     * 保存job
+     * @param job 需要暂存的任务
+     */
     public void jobStash(STab.Job job){
         this.stash = new STab.Job.Builder()
                 .script(job.script)

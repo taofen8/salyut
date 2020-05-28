@@ -61,6 +61,7 @@ import com.trico.salyut.token.Segment;
  *  	}
  *  );
  * }
+ * </pre>
  *
  * @author Shen Yin
  */
@@ -223,6 +224,7 @@ public class Salyut
 	 * 		{@link EnvKey}
 	 * @param value
 	 * 		环境变量值
+	 * @throws SalyutException salyut异常
 	 */
 	public static void setEnv(EnvKey key,Object value) throws SalyutException {
 		if (!value.getClass().equals(key.getRequiredType())){
@@ -244,6 +246,8 @@ public class Salyut
 	 * @see EnvKey#propertyName
 	 * @param key
 	 * 		{@link EnvKey}
+	 *
+	 * @return env key所对应的值
 	 */
 	public static Object getEnv(EnvKey key){
 		String tmp = System.getProperty(key.getPropertyName());
@@ -290,6 +294,7 @@ public class Salyut
 
 	/**
 	 * 从scriptQueue中获取待处理脚本
+	 * @return 待处理脚本 {@link ScriptStruct}
 	 */
 	public static ScriptStruct pollScript(){
 		return scriptQueue.poll();
@@ -314,8 +319,9 @@ public class Salyut
 	 * 预读取segmentPath在的.tr文件
 	 * @param segmentPath
 	 * 		segment文件路径
+	 * @throws IOException io异常
 	 */
-	public static void loadSegs(String segmentPath) throws  IOException, SalyutException{
+	public static void loadSegs(String segmentPath) throws  IOException{
 		if (null == segmentPath){
 			return;
 		}
@@ -364,7 +370,14 @@ public class Salyut
 
 	/**
 	 * 执行trico脚本。{@link SBrowser}为懒加载，当真正有脚本执行时才会初始化
-	 * 当BROWSER_COUNT > 1时 Salyut将会选取空闲的Browser执行脚本任务
+	 * 当BROWSER_COUNT 大于 1 时 Salyut将会选取空闲的Browser执行脚本任务
+	 * @param script
+	 * 		  trico脚本
+	 * @param channelId
+	 * 		  web socket通道id
+	 * @param missionId
+	 * 		  任务id
+	 * @throws SalyutException salyut异常
 	 */
 	public static synchronized void execScript(String script,String channelId,String missionId) throws SalyutException{
 		if (BROWSERS.size() < Salyut.LIMITED){
