@@ -211,6 +211,8 @@ public class STab implements ExecUnit {
 	 * load
 	 *
 	 * 执行{@link Job#statements} 并 {@link STab#state} = {@link STab#BUSY}
+	 *
+	 * @return {@link ExecResult}实例
 	 */
 	public ExecResult load() throws SalyutException{
 		offerMessage("[engine]: script start running.");
@@ -227,9 +229,13 @@ public class STab implements ExecUnit {
 	 * 创建{@link Job} 调用内部
 	 *
 	 * @see #open(Job)
-	 * @param script trico脚本文件
-	 * @param channelId web socket 通道id 可空
-	 * @param missionId 任务id 可空
+	 * @param script
+	 *        trico脚本文件
+	 * @param channelId
+	 *        web socket 通道id 可空
+	 * @param missionId
+	 *        任务id 可空
+	 * @throws SalyutException salyut异常
 	 */
 	public void open(String script,String channelId,String missionId) throws SalyutException{
 		open(new Job.Builder()

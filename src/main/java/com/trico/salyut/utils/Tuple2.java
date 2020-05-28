@@ -147,6 +147,9 @@ public class Tuple2<T0, T1>  {
      * {@code Tuple3.of(n, x, s)}
      * instead of
      * {@code new Tuple3<Integer, Double, String>(n, x, s)}
+     * @param value0 The value for field 0
+     * @param value1 The value for field 1
+     * @return A new Tuple
      */
     public static <T0, T1> Tuple2<T0, T1> of(T0 value0, T1 value1) {
         return new Tuple2<>(value0,

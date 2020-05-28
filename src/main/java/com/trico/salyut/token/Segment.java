@@ -182,6 +182,8 @@ public class Segment extends SToken {
 
 	/**
 	 * 调用 {@link Segment}代码片段
+	 * @return result {@link ExecResult}
+	 * @throws SalyutException salyut异常
 	 */
 	public ExecResult invoke() throws SalyutException {
 		return atTab.executor.execute(statements);

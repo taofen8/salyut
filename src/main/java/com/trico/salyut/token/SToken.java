@@ -200,6 +200,8 @@ public abstract class SToken implements ExprASTContext, LambdaExprASTContext {
      * @param tab  当前tab
      * @param level 当前创建的token列表所在层级
      * @param blockTok 当前创建的token列表所在的块级token
+     * @return {@link SToken}列表
+     * @throws SalyutException
      * <p>
      * 块级token包括以下
      * @see Segment
@@ -446,7 +448,8 @@ public abstract class SToken implements ExprASTContext, LambdaExprASTContext {
     /**
      * 将val赋值到保留字
      * @param reversed {@link Path.Reversed}
-     * @param val
+     * @param val 赋值对象
+     * @throws SalyutException salyut异常
      */
     public void setExprValue(Path.Reversed reversed, Object val) throws SalyutException {
         String path = reversedPath(reversed.getValue());
@@ -460,11 +463,12 @@ public abstract class SToken implements ExprASTContext, LambdaExprASTContext {
 
     /**
      * 将val赋值到表达式路径
-     * @param expr
-     * @param val
+     * @param expr  表达式
+     * @param val   赋值对象
      * @param ignoreSegPath 对于在segment中的路径 会追加{@link Segment#getSegmentPath()},
      *                      但是{@link Callin} 在初始化的时候已经加入了segment path，需要通过
      *                      ignoreSegPath = true来避免重复添加
+     * @throws SalyutException salyut异常
      */
     public void setExprValue(String expr,Object val, boolean ignoreSegPath) throws SalyutException{
         if (!ignoreSegPath){
@@ -484,6 +488,9 @@ public abstract class SToken implements ExprASTContext, LambdaExprASTContext {
 
     /**
      * 调用{@link #setExprValue(String, Object, boolean)}
+     * @param expr  表达式
+     * @param val   赋值对象
+     * @throws SalyutException salyut异常
      */
     public void setExprValue(String expr,Object val) throws SalyutException{
         setExprValue(expr,val,Path.isGlobalVar(expr));
@@ -531,7 +538,10 @@ public abstract class SToken implements ExprASTContext, LambdaExprASTContext {
      * <p>
      *     - find: {ele:'#body'}
      *     - if: '$1'
-     * <p/>
+     * </p>
+     *
+     * @param o result对象
+     * @throws SalyutException salyut异常
      */
 	public void setResult(Object o) throws SalyutException {
         try{
@@ -789,10 +799,9 @@ public abstract class SToken implements ExprASTContext, LambdaExprASTContext {
 		return null;
 	}
 
-
-    /**
-     * getter and setter
-     */
+    // ------------------------------------------------------------------------
+    //  getter and setter
+    // ------------------------------------------------------------------------
     public Integer getLine() {
         return line;
     }

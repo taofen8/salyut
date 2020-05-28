@@ -2,13 +2,13 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.trico.salyut</groupId>
-    <artifactId>salyut</artifactId>
-    <version>0.0.8.RC1</version>
+    <groupId>com.taofen8.mid</groupId>
+    <artifactId>trico-salyut</artifactId>
+    <version>0.0.8.RC1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>salyut</name>
-    <url>http://maven.apache.org</url>
+    <url>https://www.trico.cloud</url>
 
     <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,43 +23,17 @@
         </license>
     </licenses>
 
-    <repositories>
-        <repository>
-            <id>repo</id>
-            <url>http://122.225.114.28:8085/artifactory/libs-release</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>repo-snapshot</id>
-            <url>http://122.225.114.28:8085/artifactory/libs-snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>taofen8.repo</id>
-            <url>http://mvn.taofen8.com/artifactory/repo</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
 
     <distributionManagement>
         <repository>
-            <id>taofen8.repo</id>
-            <name>taofen8 Repository</name>
-            <url>http://mvn.taofen8.com/artifactory/local</url>
+            <id>ossrh</id>
+            <name>Nexus Release Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
         <snapshotRepository>
-            <id>taofen8.repo</id>
-            <name>taofen8 Repository</name>
-            <url>http://mvn.taofen8.com/artifactory/snapshot</url>
+            <id>ossrh</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
   
@@ -125,6 +99,48 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sonatype</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
 
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>

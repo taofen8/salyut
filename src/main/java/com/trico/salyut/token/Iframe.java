@@ -30,7 +30,7 @@ import com.trico.salyut.exception.SalyutException;
 import org.openqa.selenium.WebElement;
 
 @TokenMark(name = "iframe")
-public class Iframe extends SToken{
+public class  Iframe extends SToken{
 	@Attribute(name = "ele",exprScan = true)
 	private String ele;
 
