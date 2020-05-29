@@ -26,6 +26,14 @@ public class ExecResult {
         this.jobId = builder.jobId;
     }
 
+    public ExecResult copy(){
+        return new Builder()
+                .val(val)
+                .type(intType)
+                .jobId(jobId)
+                .build();
+    }
+
     public static class Builder{
         Object val;
         InterruptType intType;

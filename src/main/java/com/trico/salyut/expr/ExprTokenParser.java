@@ -25,6 +25,11 @@
 
 package com.trico.salyut.expr;
 
+import com.trico.salyut.Salyut;
+import com.trico.salyut.exception.SalyutException;
+import com.trico.salyut.exception.SalyutExceptionType;
+import com.trico.salyut.expr.ast.ExprASTException;
+
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -65,6 +70,8 @@ public class ExprTokenParser {
         curToken = getTok();
     }
 
+
+
     public boolean isIdentifier() {
         return curToken.type.equals(Token.Type.IDENTIFIER);
     }
@@ -89,8 +96,9 @@ public class ExprTokenParser {
         return curToken.type.equals(Token.Type.STR);
     }
 
-    public boolean isEOF() {
+    public boolean isEOF()  {
         return curToken.type.equals(Token.Type.EOF);
+
     }
 
     public boolean isCssSelector(){

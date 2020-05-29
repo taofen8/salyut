@@ -799,6 +799,15 @@ public abstract class SToken implements ExprASTContext, LambdaExprASTContext {
 		return null;
 	}
 
+
+	//恢复token的一些状态 以便于下次调用
+	public ExecResult restoreAndCopyResult(){
+        this.subFinder = null;
+        ExecResult copy = execResult.copy();
+        setExecResult(ExecResult.getThrough());
+        return copy;
+    }
+
     // ------------------------------------------------------------------------
     //  getter and setter
     // ------------------------------------------------------------------------
