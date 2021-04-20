@@ -31,15 +31,15 @@ import org.openqa.selenium.WebElement;
 
 @TokenMark(name = "iframe")
 public class  Iframe extends SToken{
-	@Attribute(name = "ele",exprScan = true)
+	@Attribute(name = "ele",rebuildEle = true)
 	private String ele;
 
 	@Override
 	public void action() throws SalyutException {
 		super.action();
-		if(ele!=null){
-			WebElement webElement  = atTab.driver.findElementByCssSelector(ele);
-			atTab.driver.switchTo().frame(webElement);
+		Object value = getExprValue(ele);
+		if(value!=null){
+			atTab.driver.switchTo().frame((WebElement)value);
 		}else{
 			atTab.driver.switchTo().defaultContent();
 		}

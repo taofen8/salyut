@@ -56,6 +56,9 @@ public class Addressbar extends SToken{
 		if (regex != null){
 			Pattern p = Pattern.compile(regex);
 			Matcher m = p.matcher(atTab.driver.getCurrentUrl());
+			if (m.find()){
+				setExprValue(path, m.group(1));
+			}
 			setResult(m.find() ? 1:0);
 		}
 	}

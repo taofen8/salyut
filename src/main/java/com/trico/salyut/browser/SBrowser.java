@@ -106,10 +106,13 @@ public class SBrowser {
         if (headless) {
             firefoxBinary.addCommandLineOptions("--headless");
         }
+
         FirefoxOptions firefoxOptions = new FirefoxOptions();
         firefoxOptions.addPreference("http.response.timeout", 5);
         firefoxOptions.addPreference("dom.max_script_run_time", 5);
         firefoxOptions.addPreference("browser.tabs.remote.autostart", false);
+        firefoxOptions.addPreference("useAutomationExtension",false);
+        firefoxOptions.addPreference("dom.webdriver.enabled",false);
         if (mobileMode){
             firefoxOptions.addPreference("general.useragent.override",
                     "Mozilla/5.0 (iPhone; CPU iPhone OS 8_1_3 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12B466 MicroMessenger/6.2.4 NetType/WIFI Language/zh_CN");
