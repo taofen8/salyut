@@ -96,7 +96,7 @@ public class Loop extends SToken implements Block{
 		int lastElementsCount = webElements.size();
 		setExprValue(Path.Reversed.COUNT, lastElementsCount);
 
-		for (int i = (int)(long)start; i < webElements.size() && (-1L == end || i < end); i+=step) {
+		for (int i = start.intValue(); i < webElements.size() && (-1L == end || i < end); i+=step) {
 			WebElement webElement = webElements.get(i);
 			setExprValue(Path.Reversed.E, webElement);
 			setExprValue(Path.Reversed.I, i);
@@ -140,7 +140,7 @@ public class Loop extends SToken implements Block{
 		findMultiElesOff();
 		int lastElementsCount = webElements.size();
 		setExprValue(Path.Reversed.COUNT, lastElementsCount);
-		for (int i = (int)(long)start; i < webElements.size() && (-1L == end || i < end); i+=step) {
+		for (int i = start.intValue(); i < webElements.size() && (-1L == end || i < end); i+=step) {
 			WebElement webElement = webElements.get(i);
 			setExprValue(Path.Reversed.E, webElement);
 			setExprValue(Path.Reversed.I, i);
@@ -178,7 +178,7 @@ public class Loop extends SToken implements Block{
 		if (values != null) {
 			Check.requireListType(values,this);
 			setExprValue(Path.Reversed.COUNT, ((List) values).size());
-			for (int i = (int)(long)start; i < ((List) values).size() && (-1L == end || i < end); i+=step) {
+			for (int i = start.intValue(); i < ((List) values).size() && (-1L == end || i < end); i+=step) {
 				setExprValue(Path.Reversed.V, ((List) values).get(i));
 				setExprValue(Path.Reversed.I, i);
 				ExecResult result;
@@ -202,7 +202,8 @@ public class Loop extends SToken implements Block{
 	private ExecResult condLoop() throws SalyutException{
 		int i = 0;
 		while(new ID(getExprValue(cond)).castBool()) {
-			setExprValue(Path.Reversed.I, i++);
+			setExprValue(Path.Reversed.I, i);
+			i++;
 			ExecResult result;
 			try{
 				result = atTab.executor.execute(statements);

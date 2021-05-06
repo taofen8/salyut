@@ -68,6 +68,7 @@ public abstract class SToken implements ExprASTContext, LambdaExprASTContext {
     private Object param;
     private Long id;
     protected Statements<SToken> statements;
+    protected Statements<SToken> catchStatements;
 
     private Long level = 0L;
 
@@ -100,7 +101,7 @@ public abstract class SToken implements ExprASTContext, LambdaExprASTContext {
     }
 
     public static boolean isComplexToken(String tokenStr){
-        return "segment".equals(tokenStr) || "loop".equals(tokenStr);
+        return "segment".equals(tokenStr) || "loop".equals(tokenStr) || "try".equals(tokenStr);
     }
 
     public boolean isSegment(){
@@ -170,10 +171,24 @@ public abstract class SToken implements ExprASTContext, LambdaExprASTContext {
                         String key = it.next();
                         if (cleanKey(key).equals(blockKey)){
                             list = (List<Map<String,Object>>)map.get(key);
+                            break;
                         }
                     }
                     token.statements = Statements.of(SToken.getList(list,tab,token.getLevel()+1,token));
+
+                    if (((Block) token).needCatch()){
+                        while(it.hasNext()){
+                            String key = it.next();
+                            if (cleanKey(key).equals("catch")){
+                                list = (List<Map<String,Object>>)map.get(key);
+                                break;
+                            }
+                        }
+                        token.catchStatements = Statements.of(SToken.getList(list,tab,token.getLevel()+1,token));
+                    }
+
                 }
+
             }
         }
         catch (Exception e){
@@ -798,6 +813,15 @@ public abstract class SToken implements ExprASTContext, LambdaExprASTContext {
 		}
 		return null;
 	}
+
+
+	//恢复token的一些状态 以便于下次调用
+	public ExecResult restoreAndCopyResult(){
+        this.subFinder = null;
+        ExecResult copy = execResult.copy();
+        setExecResult(ExecResult.getThrough());
+        return copy;
+    }
 
     // ------------------------------------------------------------------------
     //  getter and setter

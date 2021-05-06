@@ -30,11 +30,13 @@ public class Executor<T extends SToken> {
                 tok.getTab().offerMessage(String.format(OutputRunner.OFFER_MESSAGE_FORMAT, TimeUtil.getTime(new Date()),tokName,"start",tok.getLine()));
             }
             tok.action();
+
             if (!tok.avoidOutputMessage()){
                 tok.getTab().offerMessage(String.format(OutputRunner.OFFER_MESSAGE_FORMAT, TimeUtil.getTime(new Date()),tokName,"complete",tok.getLine()));
             }
 
-            result = tok.getExecResult();
+            result =  tok.restoreAndCopyResult();
+
             if (result.intType.equals(ExecResult.InterruptType.BREAK)
             || result.intType.equals(ExecResult.InterruptType.RETURN)
             ||result.intType.equals(ExecResult.InterruptType.CONTINUE)){

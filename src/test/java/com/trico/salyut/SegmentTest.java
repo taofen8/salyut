@@ -97,8 +97,45 @@ public class SegmentTest extends TestCase  {
                 "              - break:\n" +
                 "      - return: '$/R'";
 
+        String seg4 = "- segment:\n" +
+                "    package: '\"tf8\"'\n" +
+                "    name: '\"alimama_campaign_apply\"'\n" +
+                "    args: { 0: '/url', 1: '/campaignId'}\n" +
+                "    body:\n" +
+                "        - load: '$/url'\n" +
+                "        - put: { path: '/ret/taskStatus', value: '1'}\n" +
+                "        - put: { path: '/ret/campaignId', value: '$/campaignId'}\n" +
+                "        - try:\n" +
+                "            do:\n" +
+                "                - find: { ele: '.login-panel'}\n" +
+                "                - if: '$1'\n" +
+                "                - then:\n" +
+                "                    - callin: { package: '\"tf8\"', seg: '\"_alimama_apply_login\"' }\n" +
+                "                - wait: {type: '\"visibility\"', ele: '.next-btn-primary'}\n" +
+                "                - wait: {type: '\"time\"', millis: '1000'}\n" +
+                "                - select: {ele: '.next-btn-primary', path: '/title' }\n" +
+                "                - if: '$/title == \"申请计划\"'\n" +
+                "                - then:\n" +
+                "                    - safeclick: {ele: '.next-btn-primary'}\n" +
+                "                    - safeclick: {ele: 'button.next-dialog-btn:nth-child(1)'}\n" +
+                "            catch:\n" +
+                "                - put: { path: '/ret/taskStatus', value: '0'}\n" +
+                "        - echo: '$/ret'\n" +
+                "        - return: '$/ret'";
 
-        List<Segment> segmentList = SToken.getSegmentList(seg3);
+        String seg5 = "- segment:\n" +
+                "    package: '\"tf8\"'\n" +
+                "    name: '\"alimama_campaign_apply\"'\n" +
+                "    args: { 0: '/url', 1: '/campaignId'}\n" +
+                "    body:\n" +
+                "        - try:\n" +
+                "            do:\n" +
+                "                - echo: '\"1\"'\n" +
+                "            catch:\n" +
+                "                - echo: '\"2\"'\n" +
+                "        - return: '$/ret'\n" +
+                "        ";
+        List<Segment> segmentList = SToken.getSegmentList(seg4);
         for (Segment segment:segmentList){
             System.out.println(segment.getPureCode());
         }

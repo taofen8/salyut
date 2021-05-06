@@ -55,6 +55,7 @@ public class BinaryExprAST extends  ExprAST {
             int tokPrec = parser.getCurToken().getPrec();
             if (tokPrec < exprPrec){
                 this.val = leftVal;
+                parser.getNextToken();
                 return;
             }
 

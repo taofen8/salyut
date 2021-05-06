@@ -37,6 +37,7 @@ public class ExprMainLoop {
         ExprTokenParser parser = new ExprTokenParser(expr);
         ExprAST lastAST = null;
         parser.getNextToken();
+
         while (!parser.isEOF()){
             if (parser.isIdentifier()){
                 if (parser.getCurToken().str.equals("$")){
