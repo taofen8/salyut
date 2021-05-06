@@ -32,6 +32,7 @@ import com.trico.salyut.exception.SalyutException;
 import com.trico.salyut.exception.SalyutExceptionType;
 import com.trico.salyut.log.Log;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -95,6 +96,9 @@ public class SBrowser {
 
     private DriverService driverService;
 
+    final static int Switch_Tab_Retry_Times = 3;
+
+    final static int Close_Tab_Retry_Times = 3;
     // ------------------------------------------------------------------------
 
     public static SBrowser ofNonPlugin() throws SalyutException{
@@ -186,7 +190,12 @@ public class SBrowser {
                                     Salyut.getResultListener().get(ret.get());
                                 }
                                 if (!needRecreateDriver){
-                                    closeRedundantTabs();
+                                    try {
+                                        closeRedundantTabs();
+                                    }catch (SalyutException e){ //eat close tab exception
+                                        e.printStackTrace();
+                                    }
+
                                     changeToPCMode();
                                 }
                             }
@@ -280,11 +289,18 @@ public class SBrowser {
         for (ExecUnit tab:tabList) {
             if (tab.isIdle()) {
                 try {
+                    //尝试解决因异常中断而导致的tab数量异常
+                    closeRedundantTabs();
                     ((STab) tab).open(script, channelId, missionId);
                 }
                 catch (Exception e){
                     if (e instanceof SalyutException){
                         getOutput().offer(channelId,missionId,e.getMessage());
+                    }
+                    else if (e instanceof WebDriverException){
+                        reset();
+                        open(script,channelId,missionId);
+                        return;
                     }
                     tab.reset();
                 }
@@ -314,13 +330,23 @@ public class SBrowser {
     }
 
     /** 关闭当前活动Tab */
-    public void closeTab(){
+    public void closeTab() throws SalyutException{
+        String[] tabs = tabSetOfWindow();
+        Integer preTabsCount = tabs.length;
         driver.close();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        int retryTime = 0;
+        while(tabSetOfWindow().length >= preTabsCount && retryTime++ < Close_Tab_Retry_Times){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+
+        if (retryTime >=Close_Tab_Retry_Times){
+            throw new SalyutException(SalyutExceptionType.SeleniumError,"close tab failed");
+        }
+
         driver.switchTo().window(getLastTab());
     }
 
@@ -353,17 +379,28 @@ public class SBrowser {
      * @throws SalyutException
      */
     public void switchTab(long index) throws SalyutException{
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        int retryTimes = 0;
+        while (retryTimes < Switch_Tab_Retry_Times){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                driver.switchTo().window(getTabOfIndex(index));
+                break;
+            }catch (SalyutException e){
+                retryTimes++;
+            }
         }
-        driver.switchTo().window(getTabOfIndex(index));
+
     }
 
     /** 清除任务中打开的tabs */
-    private void closeRedundantTabs(){
+    private void closeRedundantTabs() throws SalyutException{
         while (tabSetOfWindow().length > 2){
+            driver.switchTo().window(getLastTab());
             closeTab();
         }
     }

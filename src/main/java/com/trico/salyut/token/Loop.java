@@ -202,7 +202,8 @@ public class Loop extends SToken implements Block{
 	private ExecResult condLoop() throws SalyutException{
 		int i = 0;
 		while(new ID(getExprValue(cond)).castBool()) {
-			setExprValue(Path.Reversed.I, i++);
+			setExprValue(Path.Reversed.I, i);
+			i++;
 			ExecResult result;
 			try{
 				result = atTab.executor.execute(statements);
