@@ -314,6 +314,8 @@ public class SBrowser {
     @SuppressWarnings("unchecked")
     public void newTab(int num) {
         for (int i = 0; i < num; i++) {
+            String[] tabs = tabSetOfWindow();
+            Integer preTabsCount = tabs.length;
             driver.switchTo().window(genNewTabHandler);
             driver.findElement(By.cssSelector("a#new-blank-tab")).click();
             STab tab = new STab(driver);
@@ -367,10 +369,8 @@ public class SBrowser {
     }
 
     private String[] tabSetOfWindow(){
-        Set<String> tabs = new HashSet<String>(driver.getWindowHandles());
-        Set<String> sortSet = new TreeSet<String>() ;
-        sortSet.addAll(tabs);
-        return sortSet.toArray(new String[sortSet.size()]);
+        Set<String> tabs = driver.getWindowHandles();
+        return tabs.toArray(new String[tabs.size()]);
     }
 
     /**
