@@ -12,21 +12,31 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 @TokenMark(name = "safeclick")
 public class SafeClick extends SToken {
-    @Attribute(name = "ele" ,exprScan = true,rebuildEle = true)
-    private Object ele = null;
+    @Attribute(name = "ele" ,rebuildEle = true)
+    private String ele = null;
+    @Attribute(name = "under", rebuildEle = true)
+    private String under = null;
 
     @Override
     public void action() throws SalyutException {
         super.action();
 
-        if (null == ele){
+
+        if (under != null){
+            setSubFinder((WebElement) getExprValue(under));
+        }
+
+        WebElement webElement = (WebElement) getExprValue(ele);
+
+        if (null == webElement){
             throw new SalyutException(SalyutExceptionType.SeleniumError,this,"ele is null");
         }
 
+
         try{
             (new WebDriverWait(atTab.driver, 3))
-                    .until(ExpectedConditions.elementToBeClickable((WebElement) ele));
-            ((WebElement) ele).click();
+                    .until(ExpectedConditions.elementToBeClickable(webElement));
+            webElement.click();
             this.setResult(1);
         }catch (TimeoutException e){
             this.setResult(0);
